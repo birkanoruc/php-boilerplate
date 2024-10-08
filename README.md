@@ -39,7 +39,25 @@ A beginner project to develop a web application based on MVC architecture with P
    ```bash
    cp -r vendor/twbs/bootstrap/dist/* public/assets/bootstrap
    ```
-6. **Database configuration:**:
+
+## Database Setup
+
+The project includes a database schema file, `php_boilerplate.sql`, located in the root directory. You will need to import this file into your MySQL database to set up the necessary tables.
+
+### Steps to import the SQL file:
+
+1. Open your MySQL database management tool (e.g., phpMyAdmin, MySQL Workbench, or command line).
+2. Create a new database with the name mentioned in your `.env` file.
+3. Import the `php_boilerplate.sql` file into this database.
+   - If using phpMyAdmin, select the database and use the **Import** tab to upload the SQL file.
+   - If using the command line, run the following command:
+     ```bash
+     mysql -u your_username -p your_database_name < php_boilerplate.sql
+     ```
+
+Make sure the database details in your `.env` file match the newly created database.
+
+### Database Configuration::
 
 Enter your database connection information in the `.env` file.
 
@@ -50,4 +68,58 @@ DB_PORT=3306
 DB_DATABASE=your_database_name
 DB_USERNAME=your_database_user
 DB_PASSWORD=your_database_password
+```
+
+## Structure
+
+The project has the following folder structure:
+
+- **App/**: Core application files. Used for the MVC structure.
+- **Core/**: Core classes and fundamental functions of the project.
+- **vendor/**: Dependencies installed via Composer.
+- **index.php**: The main entry point of the application, responsible for routing the request and bootstrapping the app.
+
+### Routing
+
+To add a simple route, you can add a new path in the `App/Routes.php` file:
+
+```php
+use Pecee\SimpleRouter\SimpleRouter as Router;
+
+Router::get('/', 'App\Controllers\HomeController@index');
+```
+
+For more details, you can check the SimpleRouter library.
+
+### Controller
+
+To create a new controller, add a new class in the App/Controllers directory:
+
+```php
+namespace App\Controllers;
+
+use Core\Controller;
+
+class HomeController extends Controller
+{
+    public function index()
+    {
+        return $this->view('home.index');
+    }
+}
+```
+
+### Validation
+
+You can perform form validation using the Respect\Validation library:
+
+```php
+use Respect\Validation\Validator as v;
+
+$input = $_POST['email'];
+$validation = v::email()->validate($input);
+
+if (!$validation) {
+    echo "Invalid email address.";
+}
 ```
